@@ -40,7 +40,7 @@ public class ConnectionManager {
         Password hashSalt = new Password();
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM login.user");
+            resultSet = statement.executeQuery("SELECT * FROM LoginCloudDB.user");
             while(resultSet.next()){
                 if(StringUtils.equals(resultSet.getString("username"),username) &&
                         hashSalt.checkPassword(password,resultSet.getString("password"))){
@@ -55,7 +55,7 @@ public class ConnectionManager {
 
     public void deleteRow(String name) {
         try {
-            PreparedStatement st = connection.prepareStatement("DELETE FROM login.user WHERE username = ?");
+            PreparedStatement st = connection.prepareStatement("DELETE FROM LoginCloudDB.user WHERE username = ?");
             st.setString(1,name);
             st.executeUpdate();
         } catch(Exception e) {
@@ -64,7 +64,7 @@ public class ConnectionManager {
     }
 
     public void updateColumn(String username, String columnToUpdate, String valueToUpdate ) throws SQLException{
-        String query = "UPDATE login.user SET "+columnToUpdate+" = ? WHERE username = ?";
+        String query = "UPDATE LoginCloudDB.user SET "+columnToUpdate+" = ? WHERE username = ?";
         PreparedStatement preparedStmt = connection.prepareStatement(query);
         preparedStmt.setString(1, valueToUpdate);
         preparedStmt.setString(2, username);
@@ -73,7 +73,7 @@ public class ConnectionManager {
     }
     public void updateRow( String id,String username, String fname, String lname) {
         try {
-            String query = "UPDATE login.user SET username = ?, firstname = ?, lastname = ? WHERE username = ?";
+            String query = "UPDATE LoginCloudDB.user SET username = ?, firstname = ?, lastname = ? WHERE username = ?";
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, username);
             preparedStmt.setString(2, fname);
@@ -90,7 +90,7 @@ public class ConnectionManager {
     }
 
     public UserModel selectUserRowByUsername(String username){
-        String query = "SELECT * FROM login.user WHERE username = '"+username+"'";
+        String query = "SELECT * FROM LoginCloudDB.user WHERE username = '"+username+"'";
         try {
             // create the java statement
             Statement st = connection.createStatement();
@@ -102,12 +102,12 @@ public class ConnectionManager {
                 int id = rs.getInt("userid");
                 String firstName = rs.getString("firstname");
                 String lastName = rs.getString("lastname");
-//                String status  = rs.getString("status");
+                String status  = rs.getString("status");
                 String password = rs.getString("password");
                 UserModel user = new UserModel();
                 user.setFirstname(firstName);
                 user.setLastname(lastName);
-//                user.setStatus(status);
+                user.setStatus(status);
                 user.setPassword(password);
                 user.setUsername(username);
                 user.setUserid(id);
@@ -121,7 +121,7 @@ public class ConnectionManager {
     }
     public Set<UserModel> selectUser(){
         Set<UserModel> ret = new HashSet<>();
-        String query = "SELECT * FROM login.user";
+        String query = "SELECT * FROM LoginCloudDB.user";
         try {
             // create the java statement
             Statement st = connection.createStatement();
@@ -134,12 +134,12 @@ public class ConnectionManager {
                 String username = rs.getString("username");
                 String firstName = rs.getString("firstname");
                 String lastName = rs.getString("lastname");
-//                String status  = rs.getString("status");
+                String status  = rs.getString("status");
                 String password = rs.getString("password");
                 UserModel user = new UserModel();
                 user.setFirstname(firstName);
                 user.setLastname(lastName);
-//                user.setStatus(status);
+                user.setStatus(status);
                 user.setPassword(password);
                 user.setUsername(username);
                 user.setUserid(id);
@@ -158,7 +158,7 @@ public class ConnectionManager {
 //            Class.forName(jdbcDriverStr);
             Password hashSalt = new Password();
             // note that i'm leaving "date_created" out of this insert statement
-            String query = "INSERT INTO login.user (username, password, firstname, lastname) VALUES(?,?,?,?,?)";
+            String query = "INSERT INTO LoginCloudDB.user (username, password, firstname, lastname, status) VALUES(?,?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2,hashSalt.hashPassword(password));

@@ -8,7 +8,7 @@ public class UserModel implements Serializable {
     private String lastname;
     private String firstname;
     private String password;
-//    private String status;
+    private String status;
 
     public UserModel(){
     }
@@ -36,13 +36,13 @@ public class UserModel implements Serializable {
         this.password = password;
     }
 
-//    public String getStatus() {
-//        return status;
-//    }
+    public String getStatus() {
+        return status;
+    }
 
-//    public void setStatus(String status) {
-//        this.status = status;
-//    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getFirstname() {
         return firstname;
